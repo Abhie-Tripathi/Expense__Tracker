@@ -12,22 +12,25 @@ const Profile = () => {
   const ctx = useContext(Contexts);
 
 
-  useEffect(async () => {
-    const responce = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyB7344iRGQ2vtTko_2awbK36aPE_nCUw2c",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          idToken: ctx.token,
-        }),
-        headers: { "Content-Type": "application/json" },
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(
+        "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyB7344iRGQ2vtTko_2awbK36aPE_nCUw2c",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            idToken: ctx.token,
+          }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      if (data && data.users && data.users[0].displayName != undefined) {
+        fullnameinputref.current.value = data.users[0].displayName;
+        profileurlinputref.current.value = data.users[0].photoUrl;
       }
-    );
-    const data = await responce.json();
-    console.log(data)
-    if(data && data.users && data.users[0]){
-    fullnameinputref.current.value = data.users[0].displayName;
-    profileurlinputref.current.value = data.users[0].photoUrl;}
+    })();
   }, []);
 
 

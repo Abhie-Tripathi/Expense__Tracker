@@ -2,12 +2,14 @@ import React,{useState} from 'react'
 
 export const Contexts = React.createContext({
     token: "",
-    settoken: ()=>{}
+    settoken: ()=>{},
+    isloggedin: false
 })
 
 
 const ContextProvider = (props) =>{
-    const [token,settoken] = useState("")
+    const initialToken = localStorage.getItem("Token")
+    const [token,settoken] = useState(initialToken)
 
     const settokenhandler = (token) =>{
         settoken(token)
@@ -15,7 +17,8 @@ const ContextProvider = (props) =>{
 
     const contextvalue = {
         token: token,
-        settoken: settokenhandler
+        settoken: settokenhandler,
+        isloggedin: !!token
     }
 
     return(<Contexts.Provider value={contextvalue}>

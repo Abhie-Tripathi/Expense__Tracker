@@ -38,6 +38,7 @@ const LoginForm = () => {
             }
         }).then((data)=>{
           ctx.settoken(data.idToken)
+          localStorage.setItem("Token",data.idToken)
           navigate("/home")
         })
         .catch(error=>alert(error.message))
@@ -77,7 +78,7 @@ const LoginForm = () => {
                 Remember me
               </label>
             </div>
-            <a href="#!" className="text-body">Forgot password?</a>
+            <Link to="/forgotpassword" className="text-body">Forgot password?</Link>
           </div>
 
           <div className="text-center text-lg-start mt-4 pt-2">

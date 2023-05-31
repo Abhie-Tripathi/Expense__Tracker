@@ -73,7 +73,7 @@ const Home = () => {
 
     <div className="alert alert-warning alert-dismissible fade show" role="alert">
       <strong>Holy guacamole!</strong> Your Profile is Incomplete{' '}
-      <Link to="/profile">Complete Now</Link>
+      <Link to="/home/profile">Complete Now</Link>
       <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   </div>
