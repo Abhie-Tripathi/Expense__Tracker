@@ -1,53 +1,77 @@
-import React, { useRef,useContext } from 'react';
-import { AiOutlineUser, AiOutlineLink } from 'react-icons/ai';
-import { Contexts } from './Contexts';
-import { useNavigate } from 'react-router-dom';
+import React, { useRef, useContext, useEffect } from "react";
+import { AiOutlineUser, AiOutlineLink } from "react-icons/ai";
+import { Contexts } from "./Contexts";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  const profileurlinputref = useRef()
-  const fullnameinputref = useRef()
+  const profileurlinputref = useRef();
+  const fullnameinputref = useRef();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const ctx = useContext(Contexts)
+  const ctx = useContext(Contexts);
+
+
+  useEffect(async () => {
+    const responce = await fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyB7344iRGQ2vtTko_2awbK36aPE_nCUw2c",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          idToken: ctx.token,
+        }),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    const data = await responce.json();
+    console.log(data)
+    fullnameinputref.current.value = data.users[0].displayName;
+    profileurlinputref.current.value = data.users[0].photoUrl;
+  }, []);
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const enteredfullname =  fullnameinputref.current.value
-    const enteredprofileurl = profileurlinputref.current.value
+    const enteredfullname = fullnameinputref.current.value;
+    const enteredprofileurl = profileurlinputref.current.value;
 
-    fetch("https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyB7344iRGQ2vtTko_2awbK36aPE_nCUw2c",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-            displayName:enteredfullname,
-            idToken:ctx.token,
-            photoUrl:enteredprofileurl,
-            returnSecureToken: true
-        })
-    }).then((response)=>{
-        if(response.ok){
-            return(response.json())
-        }
-        else{
-            return response.json().then((data)=>{
-                let errorMessage = "Authentication Error"
-                if(data && data.error && data.error.message) errorMessage = data.error.message
+    fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyB7344iRGQ2vtTko_2awbK36aPE_nCUw2c",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          displayName: enteredfullname,
+          idToken: ctx.token,
+          photoUrl: enteredprofileurl,
+          returnSecureToken: true,
+        }),
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          return response.json().then((data) => {
+            let errorMessage = "Authentication Error";
+            if (data && data.error && data.error.message)
+              errorMessage = data.error.message;
 
-            throw new Error(errorMessage)
-            })
+            throw new Error(errorMessage);
+          });
         }
-    }).then((data)=>{
-      ctx.settoken(data.idToken)
-      navigate("/home")
-    })
-    .catch(error=>alert(error.message))
-    
+      })
+      .then((data) => {
+        ctx.settoken(data.idToken);
+        navigate("/home");
+      })
+      .catch((error) => alert(error.message));
   };
 
   return (
     <div className="container d-flex justify-content-center">
-      <div className="profile-form" style={{ width: '30vw' }}>
+      <div className="profile-form" style={{ width: "30vw" }}>
         <h2 className="text-center mt-5">Profile</h2>
         <form onSubmit={handleSubmit} className="mt-4">
           <div className="form-group">
@@ -56,7 +80,7 @@ const Profile = () => {
             </label>
             <input
               type="text"
-                ref={fullnameinputref}
+              ref={fullnameinputref}
               className="form-control"
               placeholder="Enter your full name"
               required
@@ -75,7 +99,9 @@ const Profile = () => {
             />
           </div>
           <div className="text-center mt-4">
-            <button type="submit" className="btn btn-primary">Save</button>
+            <button type="submit" className="btn btn-primary">
+              Save
+            </button>
           </div>
         </form>
       </div>
