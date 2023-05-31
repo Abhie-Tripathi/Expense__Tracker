@@ -1,15 +1,16 @@
 import React,{useContext} from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import './Home.css';
 import { Contexts } from './Contexts';
 
 
 const Home = () => {
+  const navigate = useNavigate()
   const ctx = useContext(Contexts)
 
 
 
-  const verifyemailhandler = () =>{
+  const verifyEmailHandler = () =>{
     fetch("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyB7344iRGQ2vtTko_2awbK36aPE_nCUw2c",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -38,37 +39,45 @@ const Home = () => {
   }
 
 
-
+  const logoutHandler = () =>{
+    ctx.settoken(null)
+    navigate("/")
+  }
 
 
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div className="container">
-          <Link to="/" className="navbar-brand">Expense Tracker</Link>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to="/profile" className="nav-link">Profile</Link>
-              </li>
-              <li className="nav-item email-verification">
-                <button onClick={verifyemailhandler} className="btn btn-primary email-verification-btn">Verify Email</button>
-              </li>
-            </ul>
-          </div>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container d-flex justify-content-between align-items-center">
+        <div>
+          <Link to="/" className="navbar-brand">
+            Expense Tracker
+          </Link> 
         </div>
-      </nav>
-
-      <div className="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>Holy guacamole!</strong> Your Profile is Incomplete <Link to="/profile">Complete Now</Link>
-        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div>
+          <ul className="navbar-nav ml-auto d-flex align-items-center">
+            <li className="nav-item email-verification">
+              <button onClick={verifyEmailHandler} className="btn btn-primary email-verification-btn me-2">
+                Verify Email
+              </button>
+            </li>
+            <li className="nav-item">
+              <button onClick={logoutHandler} className="btn btn-danger ms-2">
+                Logout
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
+    </nav>
+
+    <div className="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>Holy guacamole!</strong> Your Profile is Incomplete{' '}
+      <Link to="/profile">Complete Now</Link>
+      <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-  );
+  </div>
+);
 };
 
 export default Home;
