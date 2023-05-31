@@ -25,8 +25,9 @@ const Profile = () => {
     );
     const data = await responce.json();
     console.log(data)
+    if(data && data.users && data.users[0]){
     fullnameinputref.current.value = data.users[0].displayName;
-    profileurlinputref.current.value = data.users[0].photoUrl;
+    profileurlinputref.current.value = data.users[0].photoUrl;}
   }, []);
 
 

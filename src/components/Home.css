@@ -1,0 +1,13 @@
+
+
+.email-verification {
+    display: flex;
+    align-items: center;
+  }
+  
+  .email-verification-btn {
+    margin-left: 10px;
+    background: #212529;
+    border: none;
+  }
+  
