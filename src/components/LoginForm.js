@@ -1,14 +1,14 @@
-import React,{useRef} from 'react'
+import React,{useRef,useContext} from 'react'
 import "./LoginForm.css"
 import { Link, useNavigate } from 'react-router-dom'
+import { Contexts } from './Contexts'
 
 const LoginForm = () => {
     const navigate = useNavigate()
     const emailinputref = useRef()
     const passwordinputref = useRef()
 
-
-
+    const ctx = useContext(Contexts)
 
     const onloginhandler = (event) =>{
         const enteredemail = emailinputref.current.value
@@ -36,7 +36,10 @@ const LoginForm = () => {
                 throw new Error(errorMessage)
                 })
             }
-        }).then((data)=>navigate("/home"))
+        }).then((data)=>{
+          ctx.settoken(data.idToken)
+          navigate("/home")
+        })
         .catch(error=>alert(error.message))
     }
 
