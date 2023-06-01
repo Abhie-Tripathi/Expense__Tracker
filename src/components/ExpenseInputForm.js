@@ -23,10 +23,20 @@ const ExpenseInputForm = () => {
       category: enteredCategory
     })
 
-    moneyRef.current.value = "";
-    descriptionRef.current.value = "";
-    categoryRef.current.value = "";
-    setSuccessMessage("Expense saved successfully!");
+    fetch("https://expense-tri-default-rtdb.firebaseio.com/expenseslist.json",{
+      method:"POST",
+      body:JSON.stringify({
+        money: enteredMoney,
+        description: enteredDescription,
+        category: enteredCategory
+      })
+    }).then(()=>{
+    moneyRef.current.value = ""
+    descriptionRef.current.value = ""
+    categoryRef.current.value = ""
+    setSuccessMessage("Expense saved successfully!")})
+
+    
   };
 
   return (
