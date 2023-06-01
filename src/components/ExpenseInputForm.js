@@ -11,18 +11,51 @@ const ExpenseInputForm = () => {
   const categoryRef = useRef();
   const [successMessage, setSuccessMessage] = useState("");
 
+
+  if(ctx.editexpense){
+  moneyRef.current.value = ctx.editexpense.money;
+  descriptionRef.current.value = ctx.editexpense.description;
+  categoryRef.current.value = ctx.editexpense.category;
+  }
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const enteredMoney = moneyRef.current.value;
     const enteredDescription = descriptionRef.current.value;
     const enteredCategory = categoryRef.current.value;
 
-    ctx.setexpenselist({
+    if(ctx.editexpense){
+      fetch(`https://expense-tri-default-rtdb.firebaseio.com/expenseslist/${ctx.editexpense.id}.json`,{
+      method:"PUT",
+      body:JSON.stringify({
+        money: enteredMoney,
+        description: enteredDescription,
+        category: enteredCategory
+      })
+    }).then((response)=>response.json()).then((data)=>{
+      ctx.setexpenselist({
+        id: data.name,
+        money: enteredMoney,
+        description: enteredDescription,
+        category: enteredCategory
+      })
+    moneyRef.current.value = ""
+    descriptionRef.current.value = ""
+    categoryRef.current.value = ""
+    const updatedExpenses = ctx.expenselist.filter((expense)=> expense.id!== ctx.editexpense.id)
+    updatedExpenses.push({
+      id: data.name,
       money: enteredMoney,
       description: enteredDescription,
       category: enteredCategory
     })
+    ctx.updateexpenselist(updatedExpenses)
+    setSuccessMessage("Expense saved successfully!")})
 
+    }
+
+    else{
     fetch("https://expense-tri-default-rtdb.firebaseio.com/expenseslist.json",{
       method:"POST",
       body:JSON.stringify({
@@ -30,11 +63,17 @@ const ExpenseInputForm = () => {
         description: enteredDescription,
         category: enteredCategory
       })
-    }).then(()=>{
+    }).then((response)=>response.json()).then((data)=>{
+      ctx.setexpenselist({
+        id: data.name,
+        money: enteredMoney,
+        description: enteredDescription,
+        category: enteredCategory
+      })
     moneyRef.current.value = ""
     descriptionRef.current.value = ""
     categoryRef.current.value = ""
-    setSuccessMessage("Expense saved successfully!")})
+    setSuccessMessage("Expense saved successfully!")})}
 
     
   };

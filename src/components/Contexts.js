@@ -5,7 +5,10 @@ export const Contexts = React.createContext({
     settoken: ()=>{},
     isloggedin: false,
     expenselist: [],
-    setexpenselist: ()=>{}
+    setexpenselist: ()=>{},
+    updateexpenselist: ()=>{},
+    seteditexpense: ()=>{},
+    editexpense: null
 })
 
 
@@ -13,17 +16,18 @@ const ContextProvider = (props) =>{
     const initialToken = localStorage.getItem("Token")
     const [token,settoken] = useState(initialToken)
     const [expenselist, setexpenselist] = useState([])
+    const [editexpense,seteditexpense] = useState(null) 
     
 
 
     useEffect(() => {
-        fetch("https://expense-tri-default-rtdb.firebaseio.com/expenseslist.json")
+        fetch('https://expense-tri-default-rtdb.firebaseio.com/expenseslist.json')
           .then((response) => response.json())
-          .then((data) => {
-            const expenses = Object.keys(data).map((expense) => data[expense]);
+          .then((data) => {if(data){
+            const expenses = Object.keys(data).map((expense) => ({ id: expense, ...data[expense] }));
             setexpenselist((prevExpenses) => [...prevExpenses, ...expenses]);
-          });
-      }, []);
+    }});
+      },[]);
     
     
         
@@ -35,12 +39,24 @@ const ContextProvider = (props) =>{
         setexpenselist((prevexpenselist)=>[...prevexpenselist,expense])
     }
 
+    const updateexpenselisthandler = (expenses)=>{
+        setexpenselist(expenses)
+    }
+
+    const editexpensehandler = (expense)=>{
+        seteditexpense(expense)
+    }
+
     const contextvalue = {
         token: token,
         settoken: settokenhandler,
         isloggedin: !!token,
         expenselist: expenselist,
-        setexpenselist: setexpenselisthandler
+        setexpenselist: setexpenselisthandler,
+        updateexpenselist: updateexpenselisthandler,
+        seteditexpense: editexpensehandler,
+        editexpense: editexpense
+
     }
 
     return(<Contexts.Provider value={contextvalue}>
