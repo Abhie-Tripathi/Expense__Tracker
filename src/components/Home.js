@@ -2,6 +2,8 @@ import React,{useContext} from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import './Home.css';
 import { Contexts } from './Contexts';
+import ExpenseInputForm from './ExpenseInputForm';
+import ExpenseList from './ExpenseList';
 
 
 const Home = () => {
@@ -76,6 +78,17 @@ const Home = () => {
       <Link to="/home/profile">Complete Now</Link>
       <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+    <ExpenseInputForm/>
+    <ExpenseList/>
+
+
+
+
+
+
+
+
+
   </div>
 );
 };
