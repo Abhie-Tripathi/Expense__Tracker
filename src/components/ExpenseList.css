@@ -20,4 +20,18 @@
   .expense-item p {
     color: #6c757d;
   }
+
+
+  .expense-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
   
+  /* Media query for mobile version */
+  @media (max-width: 576px) {
+    .expense-buttons {
+      justify-content: space-between;
+      margin-top: 0;
+    }
+  }

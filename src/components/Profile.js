@@ -1,7 +1,8 @@
-import React, { useRef, useContext, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { AiOutlineUser, AiOutlineLink } from "react-icons/ai";
-import { Contexts } from "./Contexts";
 import { useNavigate } from "react-router-dom";
+import {useDispatch,useSelector} from "react-redux"
+import { authSliceAction } from "./AuthSlice";
 
 const Profile = () => {
   const profileurlinputref = useRef();
@@ -9,7 +10,8 @@ const Profile = () => {
 
   const navigate = useNavigate();
 
-  const ctx = useContext(Contexts);
+  const dispatch = useDispatch()
+  const token = useSelector((state)=>state.auth.token) 
 
 
   useEffect(() => {
@@ -19,7 +21,7 @@ const Profile = () => {
         {
           method: "POST",
           body: JSON.stringify({
-            idToken: ctx.token,
+            idToken: token,
           }),
           headers: { "Content-Type": "application/json" },
         }
@@ -47,7 +49,7 @@ const Profile = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           displayName: enteredfullname,
-          idToken: ctx.token,
+          idToken: token,
           photoUrl: enteredprofileurl,
           returnSecureToken: true,
         }),
@@ -67,7 +69,7 @@ const Profile = () => {
         }
       })
       .then((data) => {
-        ctx.settoken(data.idToken);
+        dispatch(authSliceAction.setToken(data.idToken))
         navigate("/home");
       })
       .catch((error) => alert(error.message));

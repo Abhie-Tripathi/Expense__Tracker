@@ -66,24 +66,21 @@ const SignUpForm = () => {
                   <div className="d-flex flex-row align-items-center mb-4">
                     <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
                     <div className="form-outline flex-fill mb-0">
-                      <input type="email" id="form3Example3c" ref={emailinputref} className="form-control" />
-                      <label className="form-label" htmlFor="form3Example3c">Your Email</label>
+                      <input type="email" placeholder='Your Email' ref={emailinputref} className="form-control" />
                     </div>
                   </div>
 
                   <div className="d-flex flex-row align-items-center mb-4">
                     <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
                     <div className="form-outline flex-fill mb-0">
-                      <input type="password" id="form3Example4c" ref={passwordinputref} className="form-control" />
-                      <label className="form-label" htmlFor="form3Example4c">Password</label>
+                      <input type="password" placeholder='Password' ref={passwordinputref} className="form-control" />
                     </div>
                   </div>
 
                   <div className="d-flex flex-row align-items-center mb-4">
                     <i className="fas fa-key fa-lg me-3 fa-fw"></i>
                     <div className="form-outline flex-fill mb-0">
-                      <input type="password" id="form3Example4cd" className="form-control" />
-                      <label className="form-label" htmlFor="form3Example4cd">Repeat your password</label>
+                      <input type="password" placeholder='Repeat your password' className="form-control" />
                     </div>
                   </div>
 

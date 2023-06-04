@@ -1,12 +1,15 @@
-import React, { useContext } from "react";
+import React from "react";
 import "./ExpenseList.css";
-import { Contexts } from "./Contexts";
+import {useDispatch,useSelector} from "react-redux"
+import { ExpenseSliceActions } from "./ExpenseSlice";
 
 const ExpenseList = () => {
-  const ctx = useContext(Contexts);
+  const dispatch = useDispatch()
+  const expenselist = useSelector((state)=>state.expense.expenselist)
+
 
   const handleEdit = (expense) => {
-    ctx.seteditexpense(expense)
+    dispatch(ExpenseSliceActions.setEditExpense(expense))
   };
 
   const handleDelete = (expenseId) => {
@@ -15,8 +18,8 @@ const ExpenseList = () => {
       headers:{"Content-Type":"application/json"}
     }).then((response) => {
       if (response.ok) {
-        const updatedExpenses = ctx.expenselist.filter((expense) => expense.id !== expenseId);
-        ctx.updateexpenselist(updatedExpenses);
+        const updatedExpenses = expenselist.filter((expense) => expense.id !== expenseId);
+        dispatch(ExpenseSliceActions.updateExpenseList(updatedExpenses))
       } else {
         throw new Error('Failed to delete expense');
       }
@@ -32,11 +35,11 @@ const ExpenseList = () => {
   return (
     <div className="container mt-5">
       <h3>Expense List</h3>
-      {ctx.expenselist.length === 0 ? (
+      {expenselist.length === 0 ? (
         <p>No expenses found.</p>
       ) : (
         <ul className="list-group mt-3">
-          {ctx.expenselist.map((expense, index) => (
+          {expenselist.map((expense, index) => (
             <li className="list-group-item expense-item" key={index}>
               <div className="row align-items-center">
                 <div className="col-8">
@@ -49,12 +52,14 @@ const ExpenseList = () => {
                     <button
                       className="btn btn-sm btn-primary me-2"
                       onClick={() => handleEdit(expense)}
+                      style={{ marginRight: "5px" }}
                     >
                       Edit
                     </button>
                     <button
                       className="btn btn-sm btn-danger"
                       onClick={() => handleDelete(expense.id)}
+                      style={{ marginLeft: "-5px" }}
                     >
                       Delete
                     </button>
