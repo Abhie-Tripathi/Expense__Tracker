@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React,{useEffect, useState} from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import './Home.css';
 import ExpenseInputForm from './ExpenseInputForm';
@@ -6,11 +6,14 @@ import ExpenseList from './ExpenseList';
 import {useDispatch,useSelector} from "react-redux"
 import {authSliceAction} from "./AuthSlice"
 import { ExpenseSliceActions } from './ExpenseSlice';
+import PremiumNavbar from './PremiumNav';
 
 const Home = () => {
+  const [isPremiumActivated,setisPremiumActivated] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const token = useSelector((state)=>state.auth.token)
+  const expenselist = useSelector((state)=>state.expense.expenselist)
 
 
   const verifyEmailHandler = () =>{
@@ -57,6 +60,13 @@ const Home = () => {
     localStorage.removeItem("Token")
     navigate("/")
   }
+  
+  const moneylist = expenselist.map((expense) => +expense.money);
+  const sum = moneylist.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+  const activatePremiumHandler = () => {
+    setisPremiumActivated(true)
+  };
 
 
   return (
@@ -70,16 +80,33 @@ const Home = () => {
           </div>
           <div>
             <ul className="navbar-nav ml-auto d-flex align-items-center">
-              <li className="nav-item email-verification">
+              <li className="nav-item">
+                <button
+                  style={+sum<1000 ? {display:"none"}: {}}
+                  onClick={activatePremiumHandler}
+                  className="btn btn-success me-2"
+                >
+                  Activate Premium
+                </button>
+              </li>
+              <li className="nav-item">
                 <button
                   onClick={verifyEmailHandler}
-                  className="btn btn-primary email-verification-btn me-2"
+                  className="btn btn-primary me-2"
                 >
                   Verify Email
                 </button>
               </li>
               <li className="nav-item">
-                <button onClick={logoutHandler} className="btn btn-danger">
+                <Link to="/home/profile" className="btn btn-secondary me-2">
+                  Profile
+                </Link>
+              </li>
+              <li className="nav-item">
+                <button
+                  onClick={logoutHandler}
+                  className="btn btn-danger"
+                >
                   Logout
                 </button>
               </li>
@@ -88,10 +115,16 @@ const Home = () => {
         </div>
       </nav>
 
+        {isPremiumActivated && <PremiumNavbar/>}
       <div className="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>Holy guacamole!</strong> Your Profile is Incomplete{" "}
+        <strong>Holy guacamole!</strong> Your Profile is Incomplete{' '}
         <Link to="/home/profile">Complete Now</Link>
-        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button
+          type="button"
+          className="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
       </div>
       <ExpenseInputForm />
       <ExpenseList />
