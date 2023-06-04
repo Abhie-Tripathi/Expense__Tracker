@@ -4,7 +4,7 @@ const initialtoken = localStorage.getItem("Token")
 
 const authSlice = createSlice({
     name:"Authentication",
-    initialState: {isloggedin:!!initialtoken,token:initialtoken},
+    initialState: {isloggedin:!!initialtoken,token:initialtoken,isDarkMode:false},
     reducers:{
         setToken(state,actions){
             state.token = actions.payload
@@ -14,6 +14,9 @@ const authSlice = createSlice({
         },
         logout(state){
             state.isloggedin = false
+        },
+        setisDarkMode(state){
+            state.isDarkMode = !state.isDarkMode
         }
     }
 

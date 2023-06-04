@@ -1,0 +1,11 @@
+.darkmode{
+    background: black;
+}
+
+.darkmode label{
+    color: white;
+}
+
+.darkmode h3{
+    color: white;
+}

@@ -6,16 +6,17 @@ import Home from "./components/Home";
 import Profile from "./components/Profile";
 import ForgotPass from "./components/ForgotPass";
 import {useSelector} from "react-redux"
+import "./DarkMode.css"
 
 
 function App() {
   
   const isloggedin = useSelector((state)=>state.auth.isloggedin)
-  
+  const isDarkMode = useSelector((state)=>state.auth.isDarkMode)
 
 
   return (
-    <div>
+    <div className={isDarkMode ? "darkmode":""} >
       <Router>
         <Routes>
           <Route path="/" element={<LoginForm/>}/>

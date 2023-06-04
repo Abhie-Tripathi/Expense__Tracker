@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import {CSVLink} from "react-csv"
-import {useSelector} from "react-redux"
+import {useSelector,useDispatch} from "react-redux"
+import { authSliceAction } from "./AuthSlice";
+
 
 
 const headers = [
@@ -11,8 +13,10 @@ const headers = [
 
   
   const PremiumNavbar = () => {
+    const dispatch = useDispatch()
     const data = useSelector((state)=>state.expense.expenselist)
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const isDarkMode = useSelector((state)=>state.auth.isDarkMode)
+    
 
     
     const csvReport = {
@@ -23,8 +27,7 @@ const headers = [
       
 
   const handleToggle = () => {
-    setIsDarkMode(!isDarkMode);
-    // Toggle light/dark mode here
+    dispatch(authSliceAction.setisDarkMode())
   };
 
  
