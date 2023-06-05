@@ -1,7 +1,7 @@
 import React,{useRef} from 'react'
 import "./LoginForm.css"
 import { Link, useNavigate } from 'react-router-dom'
-import {useDispatch,useSelector} from "react-redux"
+import {useDispatch} from "react-redux"
 import { authSliceAction } from './AuthSlice'
 
 const LoginForm = () => {
@@ -16,7 +16,7 @@ const LoginForm = () => {
     const onloginhandler = (event) =>{
         const enteredemail = emailinputref.current.value
         const enteredpassword = passwordinputref.current.value
-
+        localStorage.setItem("email",enteredemail.replace(/[^a-zA-Z0-9 ]/g, ''))
 
         event.preventDefault()
         fetch("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyB7344iRGQ2vtTko_2awbK36aPE_nCUw2c",{
@@ -56,7 +56,7 @@ const LoginForm = () => {
     <div className="row d-flex justify-content-center align-items-center h-100">
       <div className="col-md-9 col-lg-6 col-xl-5">
         <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-          className="img-fluid" alt="Sample image"/>
+          className="img-fluid" alt="Login"/>
       </div>
       <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
         <form>

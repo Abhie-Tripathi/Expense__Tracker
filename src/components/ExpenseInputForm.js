@@ -8,6 +8,7 @@ const ExpenseInputForm = () => {
   const dispatch = useDispatch()
   const editexpense = useSelector((state)=>state.expense.editexpense)
   const expenselist = useSelector((state)=>state.expense.expenselist)
+  const email = localStorage.getItem("email")
 
 
   const moneyRef = useRef();
@@ -17,6 +18,7 @@ const ExpenseInputForm = () => {
 
 
   if(editexpense){
+    console.log("jo")
   moneyRef.current.value = editexpense.money;
   descriptionRef.current.value = editexpense.description;
   categoryRef.current.value = editexpense.category;
@@ -30,7 +32,7 @@ const ExpenseInputForm = () => {
     const enteredCategory = categoryRef.current.value;
 
     if(editexpense){
-      fetch(`https://expense-tri-default-rtdb.firebaseio.com/expenseslist/${editexpense.id}.json`,{
+      fetch(`https://expense-tri-default-rtdb.firebaseio.com/${email}/${editexpense.id}.json`,{
       method:"PUT",
       body:JSON.stringify({
         money: enteredMoney,
@@ -61,7 +63,7 @@ const ExpenseInputForm = () => {
     }
 
     else{
-    fetch("https://expense-tri-default-rtdb.firebaseio.com/expenseslist.json",{
+    fetch(`https://expense-tri-default-rtdb.firebaseio.com/${email}.json`,{
       method:"POST",
       body:JSON.stringify({
         money: enteredMoney,

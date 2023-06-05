@@ -14,6 +14,7 @@ const Home = () => {
   const dispatch = useDispatch()
   const token = useSelector((state)=>state.auth.token)
   const expenselist = useSelector((state)=>state.expense.expenselist)
+  const email = localStorage.getItem("email")
 
 
   const verifyEmailHandler = () =>{
@@ -43,13 +44,13 @@ const Home = () => {
 }
 
   useEffect(() => {
-    fetch('https://expense-tri-default-rtdb.firebaseio.com/expenseslist.json')
+    fetch(`https://expense-tri-default-rtdb.firebaseio.com/${email}.json`)
       .then((response) => response.json())
       .then((data) => {if(data){
         const expenses = Object.keys(data).map((expense) => ({ id: expense, ...data[expense] }));
         dispatch(ExpenseSliceActions.updateExpenseList([...expenses]))
 }});
-  },[]);
+  },[dispatch,email]);
 
 
 

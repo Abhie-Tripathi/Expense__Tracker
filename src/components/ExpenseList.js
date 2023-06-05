@@ -6,6 +6,7 @@ import { ExpenseSliceActions } from "./ExpenseSlice";
 const ExpenseList = () => {
   const dispatch = useDispatch()
   const expenselist = useSelector((state)=>state.expense.expenselist)
+  const email = localStorage.getItem("email")
 
 
   const handleEdit = (expense) => {
@@ -13,7 +14,7 @@ const ExpenseList = () => {
   };
 
   const handleDelete = (expenseId) => {
-    fetch(`https://expense-tri-default-rtdb.firebaseio.com/expenseslist/${expenseId}.json`,{
+    fetch(`https://expense-tri-default-rtdb.firebaseio.com/${email}/${expenseId}.json`,{
       method:"DELETE",
       headers:{"Content-Type":"application/json"}
     }).then((response) => {
